@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from 'dotenv'
+import callGemini from '../services/callGemini.js';
 
 dotenv.config({ path: './config.env' });
 
@@ -8,14 +9,14 @@ dotenv.config({ path: './config.env' });
 // The router will be added as a middleware and will take control of requests starting with path /record.
 const router = express.Router();
 
-console.log("record file loaded !");
 
 // This section will help you get a list of all the records.
 router.post("/call-analytics", async (req, res) => {
     const apiKey = req.headers['x-api-key'];
     if(apiKey == process.env.YOUR_SECRET_API_KEY){
-
-        res.status(200).send("API key matched!");
+        console.log(req.body);
+        const resp = callGemini(req.body);
+        res.status(200).send(resp);
     }else{
        res.status(401).send("Unauthorized: Invalid API Key"); 
     }   
