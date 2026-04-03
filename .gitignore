@@ -1,16 +1,16 @@
 # Dependency folders (The heaviest folders!)
-node_modules/
-client/node_modules/
-server/node_modules/
+node_modules
+./client/node_modules/
+./server/node_modules/
 
 # Environment variables (Crucial for security)
 .env
 *.env
-server/config.env
+./server/config.env
 
 # Build/Production folders
-client/dist/
-client/build/
+./client/dist/
+./client/build/
 
 # Debug logs
 npm-debug.log*
