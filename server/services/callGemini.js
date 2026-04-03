@@ -20,13 +20,87 @@ async function askGemini(question) {
         description: "Response to a user question with metadata",
         type: SchemaType.OBJECT,
         properties: {
-            answer: {
+            status:{
                 type: SchemaType.STRING,
-                description: "The direct answer to the question.",
+                enum: ["Success", "Failure"],
+                description: "True if got answer, false if there is no output",
             },
-            confidence_score: {
-                type: SchemaType.NUMBER,
-                description: "A value between 0 and 1 indicating how certain the AI is.",
+            language:{
+                type: SchemaType.STRING,
+                description: "Mention the one most used Language in the input",
+            },
+            transcript:{
+                type: SchemaType.STRING,
+                description: "convert the audio given into a text format and mentioned here",
+            },
+            summary:{
+                type: SchemaType.STRING,
+                description: "Concise AI-powered summary of the conversation",
+            },
+            sop_validation:{
+                type: SchemaType.OBJECT,
+                properties: {
+                    greeting:{
+                        type: SchemaType.BOOLEAN,
+                        description: "Had the agent made greetings to the customer ?",
+                    },
+                    identification:{
+                        type: SchemaType.BOOLEAN,
+                        description: "Had the agent checked he is speaking to correct customer?",
+                    },
+                    problemStatement:{
+                        type: SchemaType.BOOLEAN,
+                        description: "Had the agent mentioned the problem or reason he made call to the customer?",  
+                    },
+                    solutionOffering:{
+                        type: SchemaType.BOOLEAN,
+                        description: "Had the agent mentioned the solution to the problem mentioned by customer ?",  
+                    },
+                    closing:{
+                        type: SchemaType.BOOLEAN,
+                        description: "Had the agent mentioned thanksgiving at the end of call ?",  
+                    },
+                    complianceScore:{
+                        type: SchemaType.NUMBER,
+                        description: "A value between 0 and 1 indicating had the agent followed SOP steps",
+                    },
+                    adherenceStatus:{
+                        type: SchemaType.STRING,
+                        enum: ["FOLLOWED", "NOT_FOLLOWED"],
+                        description: "if the agent adherenced to the SOP mention FOLLOWED else mention NOT_FOLLOWED",
+                    },
+                    explanation:{
+                        type: SchemaType.STRING,
+                        description: "Mention consice summary result of SOP validation",
+                    }
+                },
+                description: "Correct detection of whether the agent followed the SOP steps:  greeting, identification, problemStatement, solutionOffering, closing, complianceScore (0.0 to 1.0) and adherenceStatus.",
+            },
+            analytics:{
+                type: SchemaType.OBJECT,
+                properties: {
+                    paymentPreference:{
+                        type: SchemaType.STRING,
+                        enum: ["EMI", "FULL_PAYMENT", "PARTIAL_PAYMENT", "DOWN_PAYMENT"],
+                        description: "select Correct categorization of payment preference (EMI, FULL_PAYMENT, PARTIAL_PAYMENT, DOWN_PAYMENT) mentioned by the customer",
+                    },
+                    rejectionReason:{
+                        type: SchemaType.STRING,
+                        enum: ["HIGH_INTEREST", "BUDGET_CONSTRAINTS", "ALREADY_PAID", "NOT_INTERESTED", "NONE"],
+                        description: "select Correct categorization of reason rejecting the offering/payment (HIGH_INTEREST, BUDGET_CONSTRAINTS, ALREADY_PAID, NOT_INTERESTED, NONE) mentioned by the customer",
+                    },
+                    sentiment:{
+                        type: SchemaType.STRING,
+                        enum: ["positive", "neutral", "negative"],
+                        description: "what is the sentiment or mood of the customer (Positive, Negative, Neutral)?",
+                    }
+                },
+                description: "Correct categorization of payment preference (EMI, FULL_PAYMENT, PARTIAL_PAYMENT, DOWN_PAYMENT) Correct identification of the reason if payment was not completed",
+            },
+            Keywords:{
+                type: SchemaType.ARRAY,
+                items: { type: SchemaType.STRING },
+                description: "Detects the main keywords from the transcript and summary",
             },
             sources: {
                 type: SchemaType.ARRAY,
@@ -65,7 +139,7 @@ async function askGemini(question) {
     const mimeType = audioFormt === "mp3" ? "audio/mpeg" : `audio/${audioFormt}`;
 
     // 2. Build the prompt using your metadata
-    const prompt = `This is an audio file in ${lang}. Please transcribe it and summarize the main points in JSON format.`;
+    const prompt = `This is an audio file in ${lang}. Please transcribe it and summarize the main points, perform SOP Validation by Correct detection of whether the agent followed the SOP steps, perform Analytics Correct categorization of payment preference and correct identification of the reason if payment was not completed, perform Keywords Detects the main keywords from the transcript and summary in JSON format.`;
 
     // 3. Send the specific parts to Gemini
     const result = await model.generateContent([
