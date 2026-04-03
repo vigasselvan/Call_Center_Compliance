@@ -39,7 +39,7 @@ async function askGemini(question) {
 
     // 3. Setup the model (Flash is the fastest/cheapest/free-tier friendly)
     const model = genAI.getGenerativeModel({
-        model: "gemini-1.5-flash",
+        model: "gemini-3-flash-preview",
         generationConfig: {
             responseMimeType: "application/json",
             responseSchema: schema,

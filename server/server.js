@@ -12,17 +12,18 @@ app.use("/api", records);
 
 //
 // The client gets the API key from the environment variable `GEMINI_API_KEY`.
-const ai = new GoogleGenAI({});
+// const ai = new GoogleGenAI({});
 
-async function mainFunc() {
-  const response = await ai.models.generateContent({
-    model: "gemini-3-flash-preview",
-    contents: "Explain how AI works in a few words",
-  });
-  console.log("--res--" + response.text);
-}
+// async function mainFunc() {
+//   const response = await ai.models.generateContent({
+//     model: "gemini-3-flash-preview",
+//     contents: "Explain how AI works in a few words",
+//   });
+//   console.log("--res--" + response.text);
+// }
 
-mainFunc();
+// mainFunc();
+
 
 const sendData = async () => {
     const response = await fetch('http://localhost:5050/api/call-analytics', {
