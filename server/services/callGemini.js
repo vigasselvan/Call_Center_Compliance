@@ -101,14 +101,9 @@ async function askGemini(question) {
                 type: SchemaType.ARRAY,
                 items: { type: SchemaType.STRING },
                 description: "Detects the main keywords from the transcript and summary",
-            },
-            sources: {
-                type: SchemaType.ARRAY,
-                items: { type: SchemaType.STRING },
-                description: "List of sources or key facts used.",
-            },
+            }
         },
-        required: ["answer", "confidence_score"],
+        required: ["status", "language", "transcript", "summary", "sop_validation", "analytics", "Keywords"],
     };
 
     // 3. Setup the model (Flash is the fastest/cheapest/free-tier friendly)
