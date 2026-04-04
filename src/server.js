@@ -49,6 +49,8 @@ const sendData = async () => {
     }
 };
 
+export default app;
+
 // START THE SERVER FIRST
 app.listen(PORT, () => {
   console.log(`✅ Server listening on port ${PORT}`);
