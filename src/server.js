@@ -15,7 +15,7 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use("/api", records);
+app.use("/", records);
 
 // This function simulates a client request
 const sendData = async () => {

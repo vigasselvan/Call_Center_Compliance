@@ -8,7 +8,7 @@ dotenv.config({ path: './config.env' });
 const router = express.Router();
 
 
-router.post("/call-analytics", async (req, res) => {
+router.post("/api/call-analytics", async (req, res) => {
     const apiKey = req.headers['x-api-key'];
 
     //check valid API
@@ -19,6 +19,10 @@ router.post("/call-analytics", async (req, res) => {
       console.log("!!! 401 !!!");
       res.status(401).send("Unauthorized: Invalid API Key"); 
     }   
+});
+
+router.get("/", async (req, res) => {
+    res.status(200).send("Live");
 });
 
 export default router;

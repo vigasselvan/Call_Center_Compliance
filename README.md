@@ -20,6 +20,9 @@ Once the audio is converted into base64 format and make a API request with it, G
 
 - gemini-3-flash-preview
 
+### AI Tools Used to build:
+- Google Gemini : for understanding error logs and how to communicate with gemini-3-flash-preview
+
 ## Setup Instructions
 
 1. Clone the repository <br>
@@ -59,6 +62,13 @@ curl -X POST https://your-domain.com/api/call-analytics \
 ```
 
 Convert the audio file to base64(use base64.guru) and insert in value of `audioBase64`
+
+## Live URL:
+Application is live on https://call-center-compliance.vercel.app/
+
+>[!Note]
+> you can make request `POST https://call-center-compliance.vercel.app/api/call-analytics` in API Clients like cURL/postman.
+
 
 ## Usage
 
