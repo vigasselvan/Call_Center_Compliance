@@ -51,9 +51,9 @@ Once the audio is converted into base64 format and make a API request with it, G
    cURL Request:
 
 ```
-curl -X POST https://your-domain.com/api/call-analytics \
+curl -X POST https://localhost:5050/api/call-analytics \
   -H "Content-Type: application/json" \
-  -H "x-api-key: sk_track3_987654321" \
+  -H "x-api-key: welcome123321emoclew" \
   -d '{
     "language": "Tamil",
     "audioFormat": "mp3",
