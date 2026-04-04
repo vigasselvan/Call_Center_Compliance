@@ -1,0 +1,6 @@
+Depedencies:
+All the below packages will installed automatically using "npm i" cmd inside src folder, no need to install manually.
+-> google/generative-ai
+-> cors
+-> dotenv
+-> express
