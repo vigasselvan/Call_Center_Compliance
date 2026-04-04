@@ -5,7 +5,7 @@ dotenv.config({ path: './config.env' });
 
 
 async function askGemini(question) {
-    // 1. Initialize with your API Key
+    // Initialize with your API Key
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
     const apiKey = process.env.GEMINI_API_KEY;
@@ -17,14 +17,14 @@ async function askGemini(question) {
     }
 
 
-    // Define the output JSON structure 
+    // Defining the output JSON structure 
     const schema = {
         description: "Response to a user question with metadata",
         type: SchemaType.OBJECT,
         properties: {
             status:{
                 type: SchemaType.STRING,
-                enum: ["Success", "Failure"],
+                enum: ["Success", "Error"],
                 description: "True if got answer, false if there is no output",
             },
             language:{
@@ -119,23 +119,25 @@ async function askGemini(question) {
 
     let lang = null, audioFormt = null, audioBas64 = null;
 
-    if(question && question.hasOwnProperty("language")){
-        lang = question.language;
-    }
+    //Check properties present in request and get the values
+    if(question){
+        if(question.hasOwnProperty("language")){
+            lang = question.language;
+        }
+        if(question.hasOwnProperty("audioFormat")){
+            audioFormt = question.audioFormat;
+        }
 
-    if(question && question.hasOwnProperty("audioFormat")){
-        audioFormt = question.audioFormat;
+        if(question.hasOwnProperty("audioBase64")){
+            audioBas64 = question.audioBase64;
+        }
     }
-
-    if(question && question.hasOwnProperty("audioBase64")){
-        audioBas64 = question.audioBase64;
-    }
+    
 
     // Map your audioFormat to a proper MIME type
     // Gemini supports: audio/wav, audio/mp3, audio/aiff, audio/aac, etc.
     const mimeType = audioFormt === "mp3" ? "audio/mpeg" : `audio/${audioFormt}`;
 
-    // Build the prompt using your metadata
     const prompt = `This is an audio file in ${lang}. Please transcribe it and summarize the main points, perform SOP Validation by Correct detection of whether the agent followed the SOP steps, perform Analytics Correct categorization of payment preference and correct identification of the reason if payment was not completed, perform Keywords Detects the main keywords from the transcript and summary in JSON format.`;
 
     const result = await model.generateContent([
@@ -149,7 +151,6 @@ async function askGemini(question) {
     ]);
 
     console.log("result: ");
-    //console.log(result.response.text());
     return result.response.text();
 }
 
